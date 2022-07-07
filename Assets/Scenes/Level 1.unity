@@ -2421,8 +2421,8 @@ GameObject:
   m_Component:
   - component: {fileID: 581127621}
   - component: {fileID: 581127620}
-  - component: {fileID: 581127622}
   - component: {fileID: 581127623}
+  - component: {fileID: 581127624}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2460,27 +2460,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &581127622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 581127619}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 187937b0bb54947b9a56cc5eb6fff733, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  modelTransform: {fileID: 1414997327}
-  stackDistance: 0.4
-  yellowFlatPrefabs: {fileID: 1022993237182627, guid: d04d393ce76715f498cdd8615b8940a4, type: 3}
-  stacks: {fileID: 1257076905}
-  scoreText: {fileID: 1354045539}
-  closedArk: {fileID: 1021834408}
-  openArk: {fileID: 916286923}
-  winParticlesObject: {fileID: 1480892750}
-  completeMenu: {fileID: 1026063721}
 --- !u!54 &581127623
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2497,6 +2476,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &581127624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 581127619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1276dbc8a0e5471c83b2a92996184a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTransform: {fileID: 581127621}
+  modelTransform: {fileID: 1414997327}
+  yellowFlatPrefabs: {fileID: 1022993237182627, guid: d04d393ce76715f498cdd8615b8940a4, type: 3}
+  speed: 15
+  stackHolder: {fileID: 1257076905}
+  stackDistance: 0.4
+  scoreText: {fileID: 1354045539}
+  closedArk: {fileID: 1021834408}
+  openArk: {fileID: 916286923}
+  winParticlesObject: {fileID: 1480892750}
+  completeMenu: {fileID: 1026063721}
 --- !u!1001 &607531280
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5406,32 +5408,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 224902445786453919, guid: 680fafd85c16f024192891099b1460ee, type: 3}
   m_PrefabInstance: {fileID: 363148854}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1414997326 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1316372957546282, guid: c48c69ee1a460fe4ea5a1245dd6bfe9d, type: 3}
-  m_PrefabInstance: {fileID: 2087579711}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1414997327 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4356737143231218, guid: c48c69ee1a460fe4ea5a1245dd6bfe9d, type: 3}
   m_PrefabInstance: {fileID: 2087579711}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1414997328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1414997326}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1276dbc8a0e5471c83b2a92996184a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerTransform: {fileID: 581127621}
-  modelTransform: {fileID: 1414997327}
-  stack: {fileID: 1257076906}
-  speed: 15
 --- !u!224 &1440664811 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224019103266907943, guid: f206ccc114e101b4dafffd4915d4a812, type: 3}

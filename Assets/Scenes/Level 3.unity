@@ -4243,8 +4243,8 @@ GameObject:
   m_Component:
   - component: {fileID: 581127621}
   - component: {fileID: 581127620}
-  - component: {fileID: 581127622}
   - component: {fileID: 581127623}
+  - component: {fileID: 581127622}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -4291,13 +4291,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 581127619}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 187937b0bb54947b9a56cc5eb6fff733, type: 3}
+  m_Script: {fileID: 11500000, guid: a1276dbc8a0e5471c83b2a92996184a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTransform: {fileID: 581127621}
   modelTransform: {fileID: 1164351571}
-  stackDistance: 0.4
   yellowFlatPrefabs: {fileID: 1022993237182627, guid: d04d393ce76715f498cdd8615b8940a4, type: 3}
-  stacks: {fileID: 1257076905}
+  speed: 15
+  stackHolder: {fileID: 1257076905}
+  stackDistance: 0.4
   scoreText: {fileID: 1086055034}
   closedArk: {fileID: 1609701785}
   openArk: {fileID: 719320667}
@@ -8493,32 +8495,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f206ccc114e101b4dafffd4915d4a812, type: 3}
---- !u!1 &1164351570 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1316372957546282, guid: c48c69ee1a460fe4ea5a1245dd6bfe9d, type: 3}
-  m_PrefabInstance: {fileID: 1308157501}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1164351571 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4356737143231218, guid: c48c69ee1a460fe4ea5a1245dd6bfe9d, type: 3}
   m_PrefabInstance: {fileID: 1308157501}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1164351572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1164351570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1276dbc8a0e5471c83b2a92996184a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerTransform: {fileID: 581127621}
-  modelTransform: {fileID: 1164351571}
-  stack: {fileID: 1257076906}
-  speed: 13
 --- !u!224 &1167392597 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224902445786453919, guid: 680fafd85c16f024192891099b1460ee, type: 3}
