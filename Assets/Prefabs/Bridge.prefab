@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33956714495625746}
   - component: {fileID: 23266773492836399}
   m_Layer: 0
-  m_Name: qiao2
+  m_Name: Bridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

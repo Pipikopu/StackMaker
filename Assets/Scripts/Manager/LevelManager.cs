@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class LevelManager : Singleton<LevelManager>
 {
-    public GameObject completeMenu;
     public void Restart()
     {
-        completeMenu.SetActive(false);
+        UIManager.Ins.DeactivateCompleteMenu();
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void NextLevel()
     {
-        completeMenu.SetActive(false);
+        UIManager.Ins.DeactivateCompleteMenu();
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
@@ -24,6 +23,11 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(0);
+    }
 
+    public void StartGame()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(1);
     }
 }
