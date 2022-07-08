@@ -1,25 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-
-    //inside class
+    // Swipe variables
     Vector2 firstPressPos;
     Vector2 secondPressPos;
     Vector2 currentSwipe;
 
+    // Player Transform and Player Model Transform
     public Transform playerTransform;
     public Transform modelTransform;
-    public GameObject yellowFlatPrefabs;
 
-    private Vector3 targetPosition;
-    private Vector3 startPosition;
-
+    // Moving variables
     public float speed;
-
     public enum Direction
     {
         Idle,
@@ -28,33 +23,36 @@ public class Player : MonoBehaviour
         Left,
         Right
     }
+    private Direction direction;
+    private Direction nextDirection;
+    private Vector3 targetPosition;
 
-    private Direction direction = Direction.Idle;
-    private Direction nextDirection = Direction.Idle;
-
-    private int numOfStacks = 0;
+    // Stack variables
+    private int numOfStacks;
     public GameObject stackHolder;
     public float stackDistance;
+    public GameObject yellowFlatPrefabs;
 
+    // Score and winning variable
     private int score;
-    public Text scoreText;
-
+    private bool isWinning;
+    public GameObject winParticlesObject;
     public GameObject closedArk;
     public GameObject openArk;
 
-    private bool isWinning;
-    public GameObject winParticlesObject;
-    public GameObject completeMenu;
-
-    // Start is called before the first frame update
     void Start()
     {
+        Init();
+    }
+
+    public void Init()
+    {
         score = 0;
+        numOfStacks = 0;
         isWinning = false;
         direction = Direction.Idle;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (direction == Direction.Idle && !isWinning)
@@ -63,28 +61,39 @@ public class Player : MonoBehaviour
         }
         else
         {
-            playerTransform.position = Vector3.MoveTowards(playerTransform.position, targetPosition, speed * Time.deltaTime);
+            Move();
             if (Vector3.Distance(playerTransform.position, targetPosition) < 0.1f)
             {
-                playerTransform.position = targetPosition;
-                direction = nextDirection;
-                nextDirection = Direction.Idle;
-                switch (direction)
-                {
-                    case Direction.Forward:
-                        GetTargetPosition(Vector3.forward);
-                        break;
-                    case Direction.Backward:
-                        GetTargetPosition(-Vector3.forward);
-                        break;
-                    case Direction.Right:
-                        GetTargetPosition(Vector3.right);
-                        break;
-                    case Direction.Left:
-                        GetTargetPosition(-Vector3.right);
-                        break;
-                }
+                CheckNextDirection();
             }
+        }
+    }
+
+    private void Move()
+    {
+        playerTransform.position = Vector3.MoveTowards(playerTransform.position, targetPosition, speed * Time.deltaTime);
+    }
+
+    private void CheckNextDirection()
+    {
+        playerTransform.position = targetPosition;
+        direction = nextDirection;
+        nextDirection = Direction.Idle;
+
+        switch (direction)
+        {
+            case Direction.Forward:
+                GetTargetPosition(Vector3.forward);
+                break;
+            case Direction.Backward:
+                GetTargetPosition(Vector3.back);
+                break;
+            case Direction.Right:
+                GetTargetPosition(Vector3.right);
+                break;
+            case Direction.Left:
+                GetTargetPosition(Vector3.left);
+                break;
         }
     }
 
@@ -94,9 +103,6 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(playerTransform.position - Vector3.up * 0.5f, directionVec, out RaycastHit hit, Mathf.Infinity, layer_mask))
         {
             targetPosition = playerTransform.position + directionVec * (hit.distance - 0.5f);
-            Debug.Log("Hit Wall");
-            Debug.Log(targetPosition);
-            startPosition = playerTransform.position;
             return true;
         }
         return false;
@@ -117,9 +123,9 @@ public class Player : MonoBehaviour
 
             currentSwipe.Normalize();
 
+            // Swipe up
             if (currentSwipe.y > 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
             {
-                Debug.Log("up swipe");
                 if (GetTargetPosition(Vector3.forward))
                 {
                     direction = Direction.Forward;
@@ -129,135 +135,142 @@ public class Player : MonoBehaviour
             //swipe down
             if (currentSwipe.y < 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
             {
-                Debug.Log("down swipe");
                 if (GetTargetPosition(Vector3.back))
                 {
                     direction = Direction.Backward;
                 }
+                //GetTargetPosition(Vector3.back);
+                //direction = Direction.Backward;
             }
             //swipe left
             if (currentSwipe.x < 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
             {
-                Debug.Log("left swipe");
-                if (GetTargetPosition(-Vector3.right))
+                if (GetTargetPosition(Vector3.left))
                 {
                     direction = Direction.Left;
                 }
+                //GetTargetPosition(Vector3.left);
+                //direction = Direction.Left;
             }
             //swipe right
             if (currentSwipe.x > 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
             {
-                Debug.Log("right swipe");
                 if (GetTargetPosition(Vector3.right))
                 {
                     direction = Direction.Right;
                 }
+                //GetTargetPosition(Vector3.right);
+                //direction = Direction.Right;
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        GameObject stack = other.gameObject;
-        switch (stack.tag)
+        GameObject colliderObject = other.gameObject;
+        switch (colliderObject.tag)
         {
             case "DownRight":
-                if (direction == Direction.Forward)
-                {
-                    nextDirection = Direction.Right;
-                }
-                else if (direction == Direction.Left)
-                {
-                    nextDirection = Direction.Backward;
-                }
+                nextDirection = direction == Direction.Forward ? Direction.Right : direction == Direction.Left ? Direction.Backward : nextDirection;
                 break;
 
             case "UpRight":
-                if (direction == Direction.Backward)
-                {
-                    nextDirection = Direction.Right;
-                }
-                else if (direction == Direction.Left)
-                {
-                    nextDirection = Direction.Forward;
-                }
+                nextDirection = direction == Direction.Backward ? Direction.Right : direction == Direction.Left ? Direction.Forward : nextDirection;
                 break;
 
             case "DownLeft":
-                if (direction == Direction.Right)
-                {
-                    nextDirection = Direction.Backward;
-                }
-                else if (direction == Direction.Forward)
-                {
-                    nextDirection = Direction.Left;
-                }
+                nextDirection = direction == Direction.Right ? Direction.Backward : direction == Direction.Forward ? Direction.Left : nextDirection;
                 break;
 
             case "UpLeft":
-                if (direction == Direction.Right)
-                {
-                    nextDirection = Direction.Forward;
-                }
-                else if (direction == Direction.Backward)
-                {
-                    nextDirection = Direction.Left;
-                }
+                nextDirection = direction == Direction.Right ? Direction.Forward : direction == Direction.Backward ? Direction.Left : nextDirection;
                 break;
 
             case "Stack":
-                //CollectStack();
-                if (numOfStacks != 0)
-                {
-                    modelTransform.position += Vector3.up * 0.4f;
-                    stackHolder.transform.position += Vector3.up * 0.4f;
-                }
-                stack.transform.SetParent(stackHolder.transform);
-                Debug.Log("Hit Stack");
-                stack.transform.position = modelTransform.position + Vector3.up * (-0.5f + numOfStacks * -stackDistance);
-                numOfStacks += 1;
-                score += 1;
-                scoreText.text = score.ToString();
-                stack.tag = "Untagged";
+                Stack(colliderObject);
                 break;
 
             case "BridgeBlock":
-                modelTransform.position -= Vector3.up * 0.4f;
-                numOfStacks -= 1;
-                Destroy(stackHolder.transform.GetChild(0).gameObject);
-                GameObject newYellowFlat = Instantiate(yellowFlatPrefabs) as GameObject;
-                stack.tag = "Untagged";
-                newYellowFlat.transform.SetParent(stack.transform);
-                newYellowFlat.transform.position = stack.transform.position + new Vector3(0, 0.02f, 0);
+                Unstack(colliderObject);
                 break;
-            case "WinBlock":
-                Debug.Log("Win Block");
-                stack.tag = "Untagged";
-                isWinning = true;
-                foreach (Transform child in stackHolder.transform)
-                {
-                    GameObject.Destroy(child.gameObject);
-                    modelTransform.position -= Vector3.up * 0.4f;
-                }
-                modelTransform.position += Vector3.up * 0.4f;
-                modelTransform.eulerAngles = Vector3.up * 0;
-                foreach (Transform child in winParticlesObject.transform)
-                {
-                    child.GetComponent<ParticleSystem>().Play();
-                }
 
-                modelTransform.gameObject.GetComponent<Animator>().Play("Take 2");
-                closedArk.SetActive(false);
-                openArk.SetActive(true);
-                StartCoroutine(completeGameDelay());
+            case "WinBlock":
+                Win(colliderObject);
+                
                 break;
         }
     }
 
-    IEnumerator completeGameDelay()
+    private void Stack(GameObject newStack)
     {
-        yield return new WaitForSeconds(2.5f);
-        completeMenu.SetActive(true);
+        if (numOfStacks != 0)
+        {
+            // Move model higher
+            modelTransform.position += Vector3.up * 0.4f;
+            // Move stack holder higher
+            stackHolder.transform.position += Vector3.up * 0.4f;
+        }
+
+        // Add new stack to stack holder
+        numOfStacks += 1;
+        newStack.tag = "Untagged";
+        newStack.transform.SetParent(stackHolder.transform);
+        newStack.transform.position = modelTransform.position + Vector3.up * (-0.1f + numOfStacks * -stackDistance);
+
+        // Increase score
+        score += 1;
+    }
+
+    private void Unstack(GameObject bridgeObject)
+    {
+        // Move model lower
+        modelTransform.position -= Vector3.up * 0.4f;
+
+        // Destroy a stack in stack holder
+        numOfStacks -= 1;
+        Destroy(stackHolder.transform.GetChild(0).gameObject);
+
+        // Create new flat over the brigde
+        GameObject newYellowFlat = Instantiate(yellowFlatPrefabs) as GameObject;
+        newYellowFlat.transform.SetParent(bridgeObject.transform);
+        newYellowFlat.transform.position = bridgeObject.transform.position + new Vector3(0, 0.02f, 0);
+        bridgeObject.tag = "Untagged";
+    }
+
+    private void Win(GameObject winObject)
+    {
+        // Set winning condition
+        isWinning = true;
+        winObject.tag = "Untagged";
+        UIManager.Ins.SetScoreValue(score);
+
+        // Destroy all stacks in stack holder
+        foreach (Transform child in stackHolder.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+        // Change player model transform
+        modelTransform.position -= Vector3.up * 0.4f * numOfStacks;
+        modelTransform.eulerAngles = Vector3.up * 0;
+
+        // Activate winning effects
+        closedArk.SetActive(false);
+        openArk.SetActive(true);
+        foreach (Transform child in winParticlesObject.transform)
+        {
+            child.GetComponent<ParticleSystem>().Play();
+        }
+
+        // Play winning animation
+        modelTransform.gameObject.GetComponent<Animator>().Play("Take 2");
+        Invoke("CompleteGame", 2.5f);
+    }
+
+    private void CompleteGame()
+    {
         Time.timeScale = 0;
+        UIManager.Ins.ActivateCompleteMenu();
+
     }
 }
